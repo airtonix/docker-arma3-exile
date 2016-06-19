@@ -21,7 +21,9 @@ RUN echo "Fetching Exile Server ${EXILE_SERVER_VERSION}"
 ENV BUILD_STAMP 2016-06-19T13:47:06+09:30
 
 RUN wget $EXILE_SERVER_URL -O /tmp/$EXILE_SERVER_FILENAME.zip
-RUN unzip "/tmp/${EXILE_SERVER_FILENAME}.zip" -d "/tmp/"
+RUN unzip "/tmp/${EXILE_SERVER_FILENAME}.zip" -d "/tmp/" && \
+	rm -f "/tmp/${EXILE_SERVER_FILENAME}.zip"
+
 
 ENV BUILD_STAMP 2016-06-19T14:10:26+09:30
 RUN mkdir /arma3/keys -p
@@ -50,15 +52,15 @@ RUN mv ./* /docker-entrypoint-initdb.d/
 ENV BUILD_STAMP 2016-06-19T13:16:36+09:30
 RUN echo "Fetching Ext2DB ${EXILE_CLIENT_VERSION}"
 RUN wget "${EXILE_EXT2DB_URL}" --no-check-certificate -O "/tmp/${EXILE_EXT2DB_FILENAME}.7z"
-RUN 7z x "/tmp/${EXILE_EXT2DB_FILENAME}.7z" "/tmp/${EXILE_EXT2DB_FILENAME}"
-RUN mv "/tmp/${EXILE_EXT2DB_FILENAME}/Linux/${EXILE_EXT2DB_FILENAME}/ext2DB.so" /arma3/\@exileserver/
-	cd /arma3/\@exileserver/ && \
- 	ldd extDB2.so
+RUN 7z x -o"/tmp/${EXILE_EXT2DB_FILENAME}" "/tmp/${EXILE_EXT2DB_FILENAME}.7z" && \
+	rm -f "/tmp/${EXILE_EXT2DB_FILENAME}.7z"
+
+# RUN mv "/tmp/${EXILE_EXT2DB_FILENAME}/Linux/${EXILE_EXT2DB_FILENAME}/ext2DB.so" /arma3/\@exileserver/
+#	cd /arma3/\@exileserver/ && \
+#	ldd extDB2.so
 
 WORKDIR /arma3
-COPY ./configuration/ /configuration
-COPY ./profiles/ /profiles
 
-RUN rm -rf /tmp/*
+# RUN rm -rf /tmp/*
 
 # ENTRYPOINT ['bash']
