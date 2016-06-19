@@ -30,7 +30,7 @@ RUN mkdir /arma3/keys -p
 RUN mkdir /arma3/battleye -p
 RUN mkdir /arma3/mpmissions -p
 
-WORKDIR "/tmp/${EXILE_SERVER_FILENAME}/Arma\ 3\ Server"
+WORKDIR /tmp/$EXILE_SERVER_FILENAME/Arma\ 3\ Server
 
 RUN	mv ./\@ExileServer /arma3/\@exileserver && \
 	mv ./battleye/* /arma3/battleye/ && \
@@ -57,11 +57,10 @@ RUN wget "${EXILE_EXT2DB_URL}" --no-check-certificate -O "/tmp/${EXILE_EXT2DB_FI
 RUN 7z x -o"/tmp/${EXILE_EXT2DB_FILENAME}" "/tmp/${EXILE_EXT2DB_FILENAME}.7z" && \
 	rm -f "/tmp/${EXILE_EXT2DB_FILENAME}.7z"
 
-RUN mv "/tmp/${EXILE_EXT2DB_FILENAME}/Linux/${EXILE_EXT2DB_FILENAME}/ext2DB.so" /arma3/\@exileserver/
-# RUN rm -rf "/tmp/${EXILE_EXT2DB_FILENAME}"
+WORKDIR /tmp/$EXILE_EXT2DB_FILENAME/Linux/$EXILE_EXT2DB_FILENAME
+RUN cp ./extDB2.so /arma3/\@exileserver/ && \
+		rm -rf "/tmp/${EXILE_EXT2DB_FILENAME}"
 
 WORKDIR /arma3
 
-# RUN rm -rf /tmp/*
-
-# ENTRYPOINT ['bash']
+RUN rm -rf /tmp/*
