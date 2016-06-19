@@ -1,0 +1,31 @@
+store:
+  build: ./exile
+  volumes:
+    - ./exile/profiles:/profiles
+    - ./exile/missong.cfg:/server/main.cfg
+    - ./exile/basic.cfg:/server/basic.cfg
+    - /docker-entrypoint-initdb.d/
+    - /var/lib/mysql
+
+db:
+  image: mysql
+  environment:
+    MYSQL_ROOT_PASSWORD: my-secret-pw
+    MYSQL_DATABASE: exile
+    MYSQL_USER: exile
+    MYSQL_PASSWORD: exile
+  volumes_from:
+    - store
+
+server:
+  image: houki/arma3
+  volumes_from:
+    - store
+  links:
+    - db
+  ports:
+    - "2302:2302"
+    - "2303:2303"
+    - "2304:2304"
+    - "2305:2305"
+
