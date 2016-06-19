@@ -20,7 +20,7 @@ RUN echo "Fetching Exile Server ${EXILE_SERVER_VERSION}"
 
 ENV BUILD_STAMP 2016-06-19T13:47:06+09:30
 
-RUN wget $EXILE_SERVER_URL -O /tmp/$EXILE_SERVER_FILENAME.zip
+RUN wget "${EXILE_SERVER_URL}" -O "/tmp/${EXILE_SERVER_FILENAME}.zip"
 RUN unzip "/tmp/${EXILE_SERVER_FILENAME}.zip" -d "/tmp/" && \
 	rm -f "/tmp/${EXILE_SERVER_FILENAME}.zip"
 
@@ -30,7 +30,7 @@ RUN mkdir /arma3/keys -p
 RUN mkdir /arma3/battleye -p
 RUN mkdir /arma3/mpmissions -p
 
-WORKDIR /tmp/$EXILE_SERVER_FILENAME/Arma\ 3\ Server
+WORKDIR "/tmp/${EXILE_SERVER_FILENAME}/Arma\ 3\ Server"
 
 RUN	mv ./\@ExileServer /arma3/\@exileserver && \
 	mv ./battleye/* /arma3/battleye/ && \
@@ -44,6 +44,8 @@ RUN mkdir /docker-entrypoint-initdb.d/
 WORKDIR /tmp/$EXILE_SERVER_FILENAME/MySQL
 RUN mv ./* /docker-entrypoint-initdb.d/
 
+# RUN rm -rf "/tmp/${EXILE_SERVER_FILENAME}"
+
 # RUN echo "Fetching Exile Client ${EXILE_CLIENT_VERSION}"
 # RUN wget "${EXILE_CLIENT_URL}" -O "/tmp/${EXILE_CLIENT_FILENAME}.zip"
 # RUN unzip "/tmp/${EXILE_CLIENT_FILENAME}.zip" "/tmp/${EXILE_CLIENT_FILENAME}"
@@ -55,9 +57,8 @@ RUN wget "${EXILE_EXT2DB_URL}" --no-check-certificate -O "/tmp/${EXILE_EXT2DB_FI
 RUN 7z x -o"/tmp/${EXILE_EXT2DB_FILENAME}" "/tmp/${EXILE_EXT2DB_FILENAME}.7z" && \
 	rm -f "/tmp/${EXILE_EXT2DB_FILENAME}.7z"
 
-# RUN mv "/tmp/${EXILE_EXT2DB_FILENAME}/Linux/${EXILE_EXT2DB_FILENAME}/ext2DB.so" /arma3/\@exileserver/
-#	cd /arma3/\@exileserver/ && \
-#	ldd extDB2.so
+RUN mv "/tmp/${EXILE_EXT2DB_FILENAME}/Linux/${EXILE_EXT2DB_FILENAME}/ext2DB.so" /arma3/\@exileserver/
+# RUN rm -rf "/tmp/${EXILE_EXT2DB_FILENAME}"
 
 WORKDIR /arma3
 
