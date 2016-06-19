@@ -21,15 +21,22 @@
 
 1. Grab this repo
 
+```bash
     $ git clone this repo; cd to this repo;
+```
 
 2. Create a `credentials` file in `./server/` containing your steam login
 
 3. Customise the config files:
+```bash
     $ nano|vi|subl|gedit|notepad ./docker-compose.yml
+```
 
 4. build and run the images:
+
+```bash
     $ docker-compose up
+```
 
 ## Upgrading
 
@@ -54,6 +61,7 @@ uses docker to automate the creation of required infrastructure and software for
     + mounts volumes exposed by database data container.
     + ephemeral, destroy this at will.
 
-- Database Data Container
-    + data storage container for the database.
+- Store Data Container
+    + Provides exile game files
+    + Provides exile  mysql db schema and migrations
     + leave this running, use backup strategies outlined below.

@@ -1,6 +1,7 @@
 FROM alpine:3.4
 
 ENV BUILD_STAMP 2016-06-19T13:09:43+09:30
+RUN apk update
 RUN apk add --no-cache wget unzip build-base bash p7zip
 
 ENV EXILE_SERVER_VERSION 0.9.61
@@ -48,8 +49,8 @@ RUN mv ./* /docker-entrypoint-initdb.d/
 
 ENV BUILD_STAMP 2016-06-19T13:16:36+09:30
 RUN echo "Fetching Ext2DB ${EXILE_CLIENT_VERSION}"
-RUN wget "${EXILE_EXT2DB_URL}" -O "/tmp/${EXILE_EXT2DB_FILENAME}.7z"
-RUN unzip "/tmp/${EXILE_EXT2DB_FILENAME}.7z" "/tmp/${EXILE_EXT2DB_FILENAME}"
+RUN wget "${EXILE_EXT2DB_URL}" --no-check-certificate -O "/tmp/${EXILE_EXT2DB_FILENAME}.7z"
+RUN 7z x "/tmp/${EXILE_EXT2DB_FILENAME}.7z" "/tmp/${EXILE_EXT2DB_FILENAME}"
 RUN mv "/tmp/${EXILE_EXT2DB_FILENAME}/Linux/${EXILE_EXT2DB_FILENAME}/ext2DB.so" /arma3/\@exileserver/
 	cd /arma3/\@exileserver/ && \
  	ldd extDB2.so
